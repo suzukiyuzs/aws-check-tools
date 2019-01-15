@@ -13,6 +13,9 @@ $
 
 この実行結果をMackerelのサービスメトリックに投稿し、可視化/監視するような利用方法を想定しています。（=Mackerelに投げつけるため、ビルドしたコマンドをbash等でラップする想定）
 
+### Check-Cloudwatch-EC2Alarm
+引数に指定したEC2メトリックのCloudwatchアラームのステータスをOKの場合はOKにカウント、ALARMの場合はNGにカウント。
+
 ### Check-EBS-AvailableVolume
 availableのEBSボリュームをNGにカウント。available以外はOKにカウント。
 
@@ -44,7 +47,9 @@ EC2のLaunchTimeが引数に指定した時刻より古ければNGにカウン�
 ```
 $ go get github.com/suzukiyuzs/aws-check-tools
 $ cd $GOPATH/src/github.com/suzukiyuzs/aws-check-tools
-$ cd Check-EBS-AvailableVolume
+$ cd Check-Cloudwatch-EC2Alarm
+$ go build .
+$ cd ../Check-EBS-AvailableVolume
 $ go build .
 $ cd ../Check-EBS-SnapshotAmi
 $ vim main.go
@@ -71,6 +76,13 @@ $ go build .
 
 ## 実行例
 以下は、AWSのAccess Key、Secret Access Keyは「aws configure」で設定済みの環境を想定した実行例です。
+
+### Check-Cloudwatch-EC2Alarm
+```
+$ ./Check-Cloudwatch-EC2Alarm CPUUtilization
+10,1
+$
+```
 
 ### Check-EBS-AvailableVolume
 ```
