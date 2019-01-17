@@ -13,6 +13,9 @@ $
 
 この実行結果をMackerelのサービスメトリックに投稿し、可視化/監視するような利用方法を想定しています。（=Mackerelに投げつけるため、ビルドしたコマンドをbash等でラップする想定）
 
+### Check-CLB-RegisteredInstances
+ELB(CLB)にEC2が紐付けられていればOKにカウント、1台もEC2が紐付けられていない場合はNGにカウント。
+
 ### Check-Cloudwatch-EC2Alarm
 引数に指定したEC2メトリックのCloudwatchアラームのステータスをOKの場合はOKにカウント、ALARMの場合はNGにカウント。
 
@@ -47,35 +50,23 @@ EC2のLaunchTimeが引数に指定した時刻より古ければNGにカウン�
 ```
 $ go get github.com/suzukiyuzs/aws-check-tools
 $ cd $GOPATH/src/github.com/suzukiyuzs/aws-check-tools
-$ cd Check-Cloudwatch-EC2Alarm
+$ cd << サブディレクトリ >>
 $ go build .
-$ cd ../Check-EBS-AvailableVolume
-$ go build .
-$ cd ../Check-EBS-SnapshotAmi
-$ vim main.go
-    ownerId = "Your AWS Account ID"
-$ go build .
-$ cd ../Check-EBS-SnapshotTag
-$ vim main.go
-    ownerId = "Your AWS Account ID"
-$ go build .
-$ cd ../Check-EBS-VolumeDeleteFlag
-$ go build .
-$ cd ../Check-EBS-VolumeTag
-$ go build .
-$ cd ../Check-EC2-LaunchTime
-$ go build .
-$ cd ../Check-EC2-Tag
-$ go build .
-$ cd ../Check-EIP-Association
-$ go build .
-```
 
+```
+※Check-EBS-SnapshotAmi/main.go, Check-EBS-SnapshotTag/main.goはビルド前にAWSアカウントIDの修正が必要。
 ※リージョンをハードコーディングしているので「ap-northeast-1」以外の場合はregionの値も変更が必要です。
 
 
 ## 実行例
 以下は、AWSのAccess Key、Secret Access Keyは「aws configure」で設定済みの環境を想定した実行例です。
+
+### Check-CLB-RegisteredInstances
+```
+$ ./Check-CLB-RegisteredInstances
+20,4
+$
+```
 
 ### Check-Cloudwatch-EC2Alarm
 ```
