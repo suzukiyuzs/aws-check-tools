@@ -52,10 +52,33 @@ $ go get github.com/suzukiyuzs/aws-check-tools
 $ cd $GOPATH/src/github.com/suzukiyuzs/aws-check-tools
 $ cd << サブディレクトリ >>
 $ go build .
-
 ```
 ※Check-EBS-SnapshotAmi/main.go, Check-EBS-SnapshotTag/main.goはビルド前にAWSアカウントIDの修正が必要。
 ※リージョンをハードコーディングしているので「ap-northeast-1」以外の場合はregionの値も変更が必要です。
+
+
+## IAMポリシー
+以下IAMポリシーをコマンド実行前に作成し、コマンド実行時のIAMユーザーに適用、またはインスタンスプロファイルに設定します。
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeImages",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "ec2:DescribeInstances",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeVolumes",
+                "cloudwatch:DescribeAlarms",
+                "ec2:DescribeSnapshots"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
 
 
 ## 実行例
